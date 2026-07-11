@@ -169,6 +169,7 @@ export default function ClinicAdminDashboard() {
                         <thead>
                             <tr className="bg-slate-50 text-slate-600 text-xs font-bold">
                                 <th className="p-3">المريض</th>
+                                <th className="p-3">التخصص</th>
                                 <th className="p-3">الميعاد</th>
                                 <th className="p-3">إجراء</th>
                             </tr>
@@ -177,6 +178,7 @@ export default function ClinicAdminDashboard() {
                             {bookings.map(book => (
                                 <tr key={book.id} className="border-b text-sm">
                                     <td className="p-3">{book.patient_name}</td>
+                                    <td className="p-3">{book.specialty}</td>
                                     <td className="p-3 font-bold text-sky-700">
                                         {formatTime12Hour(allClinicSlots.find(s => s.id === book.slot_id)?.start_time) || "غير متاح"}
                                     </td>
