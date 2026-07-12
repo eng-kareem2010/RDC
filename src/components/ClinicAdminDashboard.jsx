@@ -169,7 +169,7 @@ export default function ClinicAdminDashboard() {
                         <thead>
                             <tr className="bg-slate-50 text-slate-600 text-xs font-bold">
                                 <th className="p-3">المريض</th>
-                                <th className="p-3">الهاتف</th>
+                                <th className="p-3">رقم الموبايل</th>
                                 <th className="p-3">التخصص</th>
                                 <th className="p-3">الميعاد</th>
                                 <th className="p-3">إجراء</th>
