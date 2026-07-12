@@ -169,6 +169,92 @@ export default function ClinicAdminDashboard() {
                         <thead>
                             <tr className="bg-slate-50 text-slate-600 text-xs font-bold">
                                 <th className="p-3">المريض</th>
+                                <th className="p-3">رقم الموبايل</th>
+                                <th className="p-3">التخصص</th>
+                                <th className="p-3">الميعاد</th>
+                                <th className="p-3">إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {bookings.map(book => (
+                                <tr key={book.id} className="border-b text-sm">
+                                    <td className="p-3">{book.patient_name}</td>
+                                    <td className="p-3">{book.phone}</td>
+                                    <td className="p-3">{book.specialty}</td>
+                                    <td className="p-3 font-bold text-sky-700">
+                                        {formatTime12Hour(allClinicSlots.find(s => s.id === book.slot_id)?.start_time) || "غير متاح"}
+                                    </td>
+                                    <td className="p-3">
+                                        <button onClick={() => deleteBooking(book.id)} className="text-white bg-rose-500 px-3 py-1 rounded-lg text-xs">حذف</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+                        }    };
+
+    if (!isAdminAuthenticated) {
+        return (
+            <div className="dentist-app-body flex items-center justify-center pt-24" dir="rtl">
+                <form onSubmit={executeAdminLogin} className="clinical-card-shell p-6 w-96 space-y-4">
+                    <h2 className="text-xl font-bold text-center mb-4">تسجيل دخول الإدارة</h2>
+                    <input type="text" placeholder="اسم المستخدم" onChange={(e) => setUsername(e.target.value)} className="dental-clinic-input" required />
+                    <input type="password" placeholder="كلمة المرور" onChange={(e) => setPassword(e.target.value)} className="dental-clinic-input" required />
+                    <button type="submit" className="w-full py-3 bg-slate-800 text-white rounded-xl">دخول</button>
+                </form>
+            </div>
+        );
+    }
+
+    return (
+        <div className="dentist-app-body p-6" dir="rtl">
+            <div className="molar-gradient-top p-6 mb-8 text-white rounded-xl">
+                <h1 className="text-2xl font-bold">👨‍⚕️ لوحة تحكم الإدارة</h1>
+                <button onClick={() => { sessionStorage.clear(); window.location.reload(); }} className="mt-4 bg-rose-500 p-2 px-4 rounded-lg">تسجيل الخروج</button>
+            </div>
+
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div className="clinical-card-shell">
+                    <h3 className="text-lg font-bold text-sky-600 mb-4">⏰ إضافة شفت جديد</h3>
+                    <form onSubmit={createNewShiftSlots} className="space-y-3">
+                        <input type="date" value={newShiftDate} onChange={(e) => setNewShiftDate(e.target.value)} className="dental-clinic-input" required />
+                        <select value={specialty} onChange={(e) => setSpecialty(e.target.value)} className="dental-clinic-input">
+                            <option value="أسنان كبير">أسنان كبير</option>
+                            <option value="أطفال">أطفال</option>
+                            <option value="تقويم">تقويم وتجميل</option>
+                        </select>
+                        <input type="number" value={duration} onChange={(e) => setDuration(e.target.value)} className="dental-clinic-input" placeholder="مدة الكشف بالدقائق" />
+                        <div className="grid grid-cols-2 gap-2">
+                            <input type="time" value={startHour} onChange={(e) => setStartHour(e.target.value)} className="dental-clinic-input" />
+                            <input type="time" value={endHour} onChange={(e) => setEndHour(e.target.value)} className="dental-clinic-input" />
+                        </div>
+                        <button type="submit" className="w-full py-2.5 bg-sky-500 text-white rounded-xl">توليد المواعيد</button>
+                    </form>
+                </div>
+
+                <div className="clinical-card-shell h-96 overflow-y-auto">
+                    <h3 className="font-bold mb-4">إدارة الشفتات</h3>
+                    {allClinicSlots.map(slot => (
+                        <div key={slot.id} className="flex justify-between p-2 border-b text-sm">
+                            <span>{slot.slot_date} - {formatTime12Hour(slot.start_time)}</span>
+                            <button onClick={() => purgeSpecificSlot(slot.id)} className="text-rose-500">حذف</button>
+                        </div>
+                    ))}
+                </div>
+
+                <div className="clinical-card-shell xl:col-span-3 overflow-x-auto">
+                    <div className="flex justify-between items-center mb-4">
+                        <h3 className="text-lg font-bold text-sky-600">📊 كشف المرضى ليوم: {filterDate}</h3>
+                        <input type="date" value={filterDate} onChange={(e) => setFilterDate(e.target.value)} className="p-2 border rounded" />
+                    </div>
+                    <table className="w-full min-w-[600px] text-right">
+                        <thead>
+                            <tr className="bg-slate-50 text-slate-600 text-xs font-bold">
+                                <th className="p-3">المريض</th>
                                 <th className="p-3">التخصص</th>
                                 <th className="p-3">الميعاد</th>
                                 <th className="p-3">إجراء</th>
