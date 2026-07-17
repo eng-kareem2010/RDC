@@ -25,7 +25,14 @@ export default function UserConsultation() {
         async function pullClinicDates() {
             const { data, error } = await supabase.from('available_slots').select('slot_date').eq('is_booked', false);
             if (!error && data) {
-                const uniqueDates = [...new Set(data.map(item => item.slot_date))];
+                // الحصول على التاريخ الحالي بتنسيق YYYY-MM-DD
+                const today = new Date().toISOString().split('T')[0];
+                
+                // تصفية التواريخ لاستبعاد الأيام الماضية وترتيبها
+                const uniqueDates = [...new Set(data.map(item => item.slot_date))]
+                    .filter(date => date >= today)
+                    .sort();
+                    
                 setAvailableDates(uniqueDates);
             }
         }
@@ -58,7 +65,7 @@ export default function UserConsultation() {
     const triggerAppointmentSubmission = async (e) => {
         e.preventDefault();
         if (!activeSlot || !fullname || !mobile) {
-            toast.error('يا صاحبي اختار وقتك واكتب بياناتك كاملة أولاً!');
+            toast.error('من فضلك تأكد من إدخال بياناتك كاملة !');
             return;
         }
 
