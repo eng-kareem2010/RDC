@@ -25,10 +25,9 @@ export default function UserConsultation() {
         async function pullClinicDates() {
             const { data, error } = await supabase.from('available_slots').select('slot_date').eq('is_booked', false);
             if (!error && data) {
-                // الحصول على التاريخ الحالي بتنسيق YYYY-MM-DD
-                const today = new Date().toISOString().split('T')[0];
                 
-                // تصفية التواريخ لاستبعاد الأيام الماضية وترتيبها
+                const today = new Date().toISOString().split('T')[0];
+        
                 const uniqueDates = [...new Set(data.map(item => item.slot_date))]
                     .filter(date => date >= today)
                     .sort();
