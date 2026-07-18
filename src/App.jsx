@@ -40,7 +40,7 @@ function LandingPage() {
                             title: "علاج الأطفال",
                             img: childrenImg,
                             desc: "رعاية خاصة لصحة أسنان أطفالكم ببيئة مريحة.",
-                            doctor:"د. أحمد دكتور بجامعة طنطا"
+                            doctor ""
                         },
                         {
                             title: "تقويم الأسنان",
